@@ -1,5 +1,7 @@
 from tkinter import *
 import csv
+from sudoku import generate_start_game_file
+from time import sleep
 
 
 #>>>>>>>>> Creating the GUI >>>>>>>>>>>>>>>#
@@ -79,27 +81,46 @@ def update_points(amount = 0):
 	#__overwrite set_points.csv
 	# score = points - amount
 
-def reset(reset_ingame_button,reset_ingame_button_image_onclick,reset_ingame_button_image_active,background_image,start_game_savefile):
-
+def reset(reset_ingame_button,reset_ingame_button_image_onclick,reset_ingame_button_image_active,background_image):
 	#__if user clicks on button, chance button image
 	reset_ingame_button.config( image = reset_ingame_button_image_onclick)
 	reset_ingame_button.image = reset_ingame_button_image_onclick
 
-	#___load game with start savefile
-	#go_to_ingame_screen(background_image,start_game_savefile)
+
+	#___load game with start game savefile
+	start_game_savefile_lst = []
+	with open("set_start_game_savefile.csv", "r",newline='') as start_game_file:
+		csv_reader = csv.reader(start_game_file)
+		for row in csv_reader:
+			start_game_savefile_lst.append(row)
+		start_game_file.close()
+	#__overwrite save game file (reset save game file)
+	with open("set_game_savefile.csv", "w",newline='') as save_game_file:
+		csv_writer = csv.writer(save_game_file)
+		for item in start_game_savefile_lst:
+			csv_writer.writerow(item)
+		save_game_file.close()
+
+	#__go back to game
+	root.update()
+	sleep(1)
+	go_to_ingame_screen(background_image,"set_game_savefile.csv")
+
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>        INGAME    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
 
 def go_to_ingame_screen(background_image,savefile = None):
 
+	user_save_file = ""
+	user_field_choise = ""
+	user_difficulty_choise = ""
+
 	#___if user wants to continue, check save file
 	if savefile == None:
+		user_save_file = "FALSE"
 		#___check selcted user choises in set difficulty sheet
 		with open("set_difficulty.csv", "r",newline='') as difficulty_file:
 			csv_reader = csv.reader(difficulty_file)
-
-			user_field_choise = ""
-			user_difficulty_choise = ""
 
 			for row in csv_reader:
 				if row[0] == "default_4x4":
@@ -130,32 +151,63 @@ def go_to_ingame_screen(background_image,savefile = None):
 						else:
 							user_difficulty_choise = "legend"
 			difficulty_file.close()
+	#____load save file or load after reset
+	elif savefile == "set_game_savefile.csv":
+		user_save_file = "TRUE"
+		with open("set_game_savefile.csv", "r",newline='') as save_game_file:
+			csv_reader = csv.reader(save_game_file)
 
-		if user_field_choise == "4x4":
-			background_image.pack_forget()
-			background_image = Label(root,image = ingame_4x4_screen_bg_image)
-			background_image.pack()
-			#create save file
-			#create start game savefile for reset
-			start_game_savefile = None
-			#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!___difficulty / save start numbers / game / points
+			for row in csv_reader:
+				if row[0] == "4x4":
+					user_field_choise = "4x4"
+					if row[1] == "novize":
+						user_difficulty_choise = "novize"
+					elif row[1] == "master":
+						user_difficulty_choise = "master"
+					elif row[1] == "legend":
+						user_difficulty_choise = "legend"
+				elif row[0] == "9x9":
+					user_field_choise = "9x9"
+					if row[1] == "novize":
+						user_difficulty_choise = "novize"
+					elif row[1] == "master":
+						user_difficulty_choise = "master"
+					elif row[1] == "legend":
+						user_difficulty_choise = "legend"
+				elif row[0] == "16x16":
+					user_field_choise = "16x16"
+					if row[2] == "novize":
+						user_difficulty_choise = "novize"
+					elif row[3] == "master":
+						user_difficulty_choise = "master"
+					elif row[3] == "legend":
+						user_difficulty_choise = "legend"
+			save_game_file.close()
 
-		elif user_field_choise == "9x9":
-			background_image.pack_forget()
-			background_image = Label(root,image = ingame_9x9_screen_bg_image)
-			background_image.pack()
-			#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!___difficulty / save start numbers / game / points
-			
+	if user_field_choise == "4x4":
+		background_image.pack_forget()
+		background_image = Label(root,image = ingame_4x4_screen_bg_image)
+		background_image.pack()
+		#___get generated start game file from sudoku_function
+		if user_save_file == "FALSE":
+			start_game_savefile = generate_start_game_file(user_field_choise,user_difficulty_choise)
+		
 
-		elif user_field_choise == "16x16":
-			background_image.pack_forget()
-			background_image = Label(root,image = ingame_16x16_screen_bg_image)
-			background_image.pack()
-			#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!___difficulty / save start numbers / game / poins
+	elif user_field_choise == "9x9":
+		background_image.pack_forget()
+		background_image = Label(root,image = ingame_9x9_screen_bg_image)
+		background_image.pack()
+		#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!___difficulty / save start numbers / game / points
+		
 
-	#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!___save file
-	else:
-		pass
+	elif user_field_choise == "16x16":
+		background_image.pack_forget()
+		background_image = Label(root,image = ingame_16x16_screen_bg_image)
+		background_image.pack()
+		#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!___difficulty / save start numbers / game / poins
+
+
+
 
 	#___________________________________INGAME Buttons_______________________________________________________________
 
@@ -246,14 +298,15 @@ def go_to_ingame_screen(background_image,savefile = None):
 	reset_ingame_button.image = reset_ingame_button_image_active
 
 	#___button mouse hover functions
-	reset_ingame_button_onclick_funktion = lambda x:reset(reset_ingame_button,reset_ingame_button_image_onclick,reset_ingame_button_image_active,background_image,start_game_savefile)
+	reset_ingame_button_onclick_funktion = lambda x:reset(reset_ingame_button,reset_ingame_button_image_onclick,reset_ingame_button_image_active,background_image)
 	reset_ingame_button.bind("<Button-1>",reset_ingame_button_onclick_funktion)
 
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MENU BUTTON FUNCTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
 
-def continue_savegame(background_image):
-	pass
+def continue_savegame(background_image,savefile = None):
+	go_to_ingame_screen(background_image,"set_game_savefile.csv")
+
 def go_to_difficulty_screen(background_image):
 
 	#_________________Replace background image
@@ -1158,9 +1211,22 @@ def load_main_menu(background_image = Label(root,image = main_menu_bg_image)):
 
 	#___look for save file and return state
 	def continue_button_state():
-		# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!check if safe game is empty
-		continue_button_state = continue_button_inactive
-		return continue_button_state
+		#___check is savefile is empty
+		save_game = "FALSE"
+		with open("set_game_savefile.csv", "r",newline='') as game_save_file:
+			csv_reader = csv.reader(game_save_file)
+			for row in csv_reader:
+				if row[0] is "":
+					save_game = "FALSE"
+				else:
+					save_game = "TRUE"
+			game_save_file.close()
+		if save_game == "FALSE":
+			continue_button_state = continue_button_inactive
+			return continue_button_state
+		elif save_game == "TRUE":
+			continue_button_state = continue_button_active
+			return continue_button_state
 
 	#___define appearance of button
 	def continue_button_appearance():
