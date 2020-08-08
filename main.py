@@ -184,6 +184,8 @@ def go_to_ingame_screen(background_image,savefile = None):
 						user_difficulty_choise = "legend"
 			save_game_file.close()
 
+	#___________________________________INGAME Games_______________________________________________________________
+
 	if user_field_choise == "4x4":
 		background_image.pack_forget()
 		background_image = Label(root,image = ingame_4x4_screen_bg_image)
@@ -191,6 +193,136 @@ def go_to_ingame_screen(background_image,savefile = None):
 		#___get generated start game file from sudoku_function
 		if user_save_file == "FALSE":
 			start_game_savefile = generate_start_game_file(user_field_choise,user_difficulty_choise)
+
+		with open("set_game_savefile.csv", "r",newline='') as save_game_file:
+			csv_reader = csv.reader(save_game_file)
+			for row in csv_reader:
+				if row[0] == "A":
+					a_1 = str(row[1])
+					a_2 = str(row[2])
+					a_3 = str(row[3])
+					a_4 = str(row[4])
+				if row[0] == "A_v":
+					if row[1] == "TRUE":
+						row_a_1 = Label(root,text = str(a_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_1.place(relx=.225, rely= 0.272, anchor="center")
+					elif row[1] == "FALSE":
+						print("not visible")
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
+						pass
+					if row[2] == "TRUE":
+						row_a_2 = Label(root,text = str(a_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_2.place(relx=.41, rely= 0.272, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[3] == "TRUE":
+						row_a_2 = Label(root,text = str(a_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_2.place(relx=.59, rely= 0.272, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[4] == "TRUE":
+						row_a_2 = Label(root,text = str(a_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_2.place(relx=.77, rely= 0.272, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+				if row[0] == "B":
+					b_1 = str(row[1])
+					b_2 = str(row[2])
+					b_3 = str(row[3])
+					b_4 = str(row[4])
+				if row[0] == "B_v":
+					if row[1] == "TRUE":
+						row_b_1 = Label(root,text = str(b_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_1.place(relx=.225, rely= 0.45, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
+						pass
+					if row[2] == "TRUE":
+						row_b_2 = Label(root,text = str(b_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_2.place(relx=.41, rely= 0.45, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[3] == "TRUE":
+						row_b_2 = Label(root,text = str(b_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_2.place(relx=.59, rely= 0.45, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[4] == "TRUE":
+						row_b_2 = Label(root,text = str(b_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_2.place(relx=.77, rely= 0.45, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+				if row[0] == "C":
+					c_1 = str(row[1])
+					c_2 = str(row[2])
+					c_3 = str(row[3])
+					c_4 = str(row[4])
+				if row[0] == "C_v":
+					if row[1] == "TRUE":
+						row_c_1 = Label(root,text = str(c_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_1.place(relx=.225, rely= 0.635, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
+						pass
+					if row[2] == "TRUE":
+						row_c_2 = Label(root,text = str(c_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_2.place(relx=.41, rely= 0.635, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[3] == "TRUE":
+						row_c_2 = Label(root,text = str(c_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_2.place(relx=.59, rely= 0.635, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[4] == "TRUE":
+						row_c_2 = Label(root,text = str(c_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_2.place(relx=.77, rely= 0.635, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+				if row[0] == "D":
+					d_1 = str(row[1])
+					d_2 = str(row[2])
+					d_3 = str(row[3])
+					d_4 = str(row[4])
+				if row[0] == "D_v":
+					if row[1] == "TRUE":
+						row_d_1 = Label(root,text = str(d_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_1.place(relx=.225, rely= 0.815, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
+						pass
+					if row[2] == "TRUE":
+						row_d_2 = Label(root,text = str(d_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_2.place(relx=.41, rely= 0.815, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[3] == "TRUE":
+						row_d_2 = Label(root,text = str(d_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_2.place(relx=.59, rely= 0.815, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+					if row[4] == "TRUE":
+						row_d_2 = Label(root,text = str(d_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_2.place(relx=.77, rely= 0.815, anchor="center")
+					else:
+						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
+						pass
+
+
+
+
+			save_game_file.close()
 		
 
 	elif user_field_choise == "9x9":
@@ -835,7 +967,7 @@ def exit_to_main_menu_from_highscore_sreen(background_image):
 
 	#___button mouse hover functions
 	def set_back_to_main_from_highscore_button_hover(event):
-		back_to_main_from_highscore_button.config( image = back_to_main_from_highscore_button_onCcick)
+		back_to_main_from_highscore_button.config( image = back_to_main_from_highscore_button_onclick)
 		back_to_main_from_highscore_button.image = back_to_main_from_highscore_button_onclick
 
 	def set_back_to_main_from_highscore_button_active(event):
@@ -1216,9 +1348,7 @@ def load_main_menu(background_image = Label(root,image = main_menu_bg_image)):
 		with open("set_game_savefile.csv", "r",newline='') as game_save_file:
 			csv_reader = csv.reader(game_save_file)
 			for row in csv_reader:
-				if row[0] is "":
-					save_game = "FALSE"
-				else:
+				if row != []:
 					save_game = "TRUE"
 			game_save_file.close()
 		if save_game == "FALSE":

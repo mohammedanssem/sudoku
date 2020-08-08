@@ -30,14 +30,16 @@ def generate_4x4_game():
 	#__generate third and forth row
 	third_row = first_column_p2[:1] + first_column_p1[:1]
 	forth_row = first_column_p2[1:2] + first_column_p1[1:2]
+	print(third_row)
+	print(forth_row)
 
 	for number in forth_row:
 		number = str(number)
-		if number not in third_column:
+		if (number not in third_column) and (number not in third_row):
 			third_row.append(number)
 	for number in third_row[:2]:
 	 	number = str(number)
-	 	if number not in third_column:
+	 	if (number not in third_column) and (number not in forth_row):
 	 		forth_row.append(number)
 	for number in range(1,5):
 		number = str(number)
@@ -71,20 +73,53 @@ def generate_4x4_game():
 	print(start_game_savefile_lst)
 
 	return start_game_savefile_lst
+
+
+
+#_______________________________GENERATE difficulty
+def add_difficulty(orginal_field,minimum = 6,maximum = 7,row_size = 4,false_count = 0):
+	difficulty_field = orginal_field
+	states = ["TRUE","FALSE"]
+	def get_random_position(row_size):
+		position = random.choice(range(2,(row_size +1)))
+		return position
+
+	if false_count == minimum:
+		return difficulty_field
+	else:
+		for row in orginal_field:
+			position = get_random_position(row_size)
+			if row[position] == "TRUE":
+				random_state = random.choice(states)
+				if random_state == "FALSE":
+					row[position] = random_state
+					false_count +=1
+	if (false_count < maximum):
+		add_difficulty(difficulty_field,minimum,maximum,row_size,false_count)
+	return difficulty_field
+
+
 #_______________________________GENERATE start_game_savefile
 def generate_start_game_file(game = None, difficulty = None):
 
 	user_field_choise = str(game)
 	user_difficulty_choise = str(difficulty)
+	points = ""
 
-	first_row = [user_field_choise] + [user_difficulty_choise]
-	#___get start numbers from game functions
-	if game == "4x4":
-		field = generate_4x4_game()
-		#__add dificulty
-		#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DIFICULTY
-		#__add default points
-		first_row.append("4000")
+		#___get start numbers from game functions
+	if user_field_choise == "4x4":
+		orginal_field = generate_4x4_game()
+		#__add default points and difficulty
+		if user_difficulty_choise == "novize":
+			field = add_difficulty(orginal_field,6,7,4)
+			points = "1111"
+		elif user_difficulty_choise == "master":
+			field = add_difficulty(orginal_field,8,9,4)
+			points = "2222"
+		elif user_difficulty_choise == "legend":
+			field = add_difficulty(orginal_field,10,11,4)
+			points = "3333"
+		first_row = [user_field_choise] + [user_difficulty_choise] + [points]
 		start_game_savefile_lst = [first_row] + (field)
 		
 
@@ -106,4 +141,4 @@ def generate_start_game_file(game = None, difficulty = None):
 		save_game_file.close()
 
 
-#generate_start_game_file("4x4", "novize")
+
