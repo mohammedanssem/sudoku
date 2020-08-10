@@ -8,45 +8,33 @@ def generate_4x4_game():
 	first_row = [str(number) for number in range(1,5)]
 	random.shuffle(first_row)
 
-	#__generates random row by splitting the first up in two parts, randomize the parts, switch the parts
+	#__generates secound row by slicing first row into two parts
 	secound_row_p1 = first_row[:2]
 	secound_row_p2 = first_row[2:]
-	random.shuffle(secound_row_p1)
-	random.shuffle(secound_row_p2)
+	#__and revering the
+	secound_row_p1 = list(reversed(secound_row_p1))
+	secound_row_p2 = list(reversed(secound_row_p2))
+	#__puzzel them togeter
 	secound_row = secound_row_p2 + secound_row_p1
 
-	#__generates first column
-	first_column_p1 = first_row[:1] + secound_row[:1]
-	#__________________________from index 1 step 2
-	first_column_p2 = first_row[1:2] + secound_row[1:2]
-	random.shuffle(first_column_p1)
-	random.shuffle(first_column_p2)
+	#__generates third row
+	third_row_p1 = list(reversed(secound_row[:2]))
+	third_row_p2 = list(reversed(secound_row[2:]))
+	third_row = third_row_p1 + third_row_p2
 
-	#__other column lists for checks
-	third_column = first_row[2:3] + secound_row[2:3]
-	forth_column = first_row[3:] + secound_row[3:]
+	#__generates forth_row
+	forth_row_p1 = list(reversed(first_row[:2]))
+	forth_row_p2 = list(reversed(first_row[2:]))
+	forth_row = forth_row_p1 + forth_row_p2
 
+	#__swap third and fourth row at random
+	states = ["TRUE","FALSE"]
+	random_state = random.choice(states)
+	if random_state == "TRUE":
+		row = forth_row
+		forth_row = third_row
+		third_row = row
 
-	#__generate third and forth row
-	third_row = first_column_p2[:1] + first_column_p1[:1]
-	forth_row = first_column_p2[1:2] + first_column_p1[1:2]
-	print(third_row)
-	print(forth_row)
-
-	for number in forth_row:
-		number = str(number)
-		if (number not in third_column) and (number not in third_row):
-			third_row.append(number)
-	for number in third_row[:2]:
-	 	number = str(number)
-	 	if (number not in third_column) and (number not in forth_row):
-	 		forth_row.append(number)
-	for number in range(1,5):
-		number = str(number)
-		if number not in third_row:
-			third_row.append(number)
-		if number not in forth_row:
-			forth_row.append(number)
 
 	#___print rows
 	print(first_row)
@@ -74,26 +62,34 @@ def generate_4x4_game():
 
 	return start_game_savefile_lst
 
-
-
 #_______________________________GENERATE difficulty
 def add_difficulty(orginal_field,minimum = 6,maximum = 7,row_size = 4,false_count = 0):
+
 	difficulty_field = orginal_field
 	states = ["TRUE","FALSE"]
+
+	#___get and return an random number beween 2 and row size (4,9,16) for random indexing
 	def get_random_position(row_size):
 		position = random.choice(range(2,(row_size +1)))
 		return position
-
+	#___base case 01 > if 6 FALSE are in the list, return it
 	if false_count == minimum:
 		return difficulty_field
+
 	else:
 		for row in orginal_field:
+			#__get random index number
 			position = get_random_position(row_size)
+			#__if item on this posion is "TRUE"
 			if row[position] == "TRUE":
+				#__get random state (TRUE or FALSE)
 				random_state = random.choice(states)
 				if random_state == "FALSE":
+					#__replace "TRUE" with "FALSE"
 					row[position] = random_state
+					#__raise false count
 					false_count +=1
+	#___base case 01 > if 7 FALSE are in the list, return it
 	if (false_count < maximum):
 		add_difficulty(difficulty_field,minimum,maximum,row_size,false_count)
 	return difficulty_field

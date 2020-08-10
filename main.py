@@ -37,10 +37,38 @@ achievement_screen_bg_image = PhotoImage(file = "images/Achievement_Screen.png")
 ingame_4x4_screen_bg_image = PhotoImage(file = "images/Ingame4x4_Screen.png")
 ingame_9x9_screen_bg_image = PhotoImage(file = "images/Ingame9x9_Screen.png")
 ingame_16x16_screen_bg_image = PhotoImage(file = "images/Ingame16x16_Screen.png")
+ingame_info_screen_bg_image = PhotoImage(file = "images/Ingame_Info_Screen.png")
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> INGAME BUTTON FUNCTIONS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#
-def show_info_screen():
-	pass
+def show_info_screen(background_image,save_game_file):
+	#_________________Replace background image
+	background_image.pack_forget()
+	background_image = Label(root,image = ingame_info_screen_bg_image)
+	background_image.pack()
+
+	#___________________Exit Button
+	exit_ingame_button_image_active = PhotoImage(file = "images/InGameButtons/InGame_ExitButton_active.png")
+	exit_ingame_button_image_onclick = PhotoImage(file = "images/InGameButtons/InGame_ExitButton_onClick.png")
+
+	#___define appearance of button
+	exit_ingame_button = Label(root,image = exit_ingame_button_image_active,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
+	exit_ingame_button.place(relx=.871, rely= 0.17, anchor="center")
+
+	#___button mouse hover functions
+	def set_exit_ingame_button_hover(event):
+		exit_ingame_button.config( image = exit_ingame_button_image_onclick)
+		exit_ingame_button.image = exit_ingame_button_image_onclick
+
+	def set_exit_ingame_button_active(event):
+		exit_ingame_button.config( image = exit_ingame_button_image_active)
+		exit_ingame_button.image = exit_ingame_button_image_active
+
+	#___mouse hover and function call
+	exit_ingame_button.bind("<Enter>", set_exit_ingame_button_hover)
+	exit_ingame_button.bind("<Leave>", set_exit_ingame_button_active)
+	exit_ingame_button_onclick_funktion = lambda x:go_to_ingame_screen(background_image,"set_game_savefile.csv")
+	exit_ingame_button.bind("<Button-1>",exit_ingame_button_onclick_funktion)
+
 
 def save_and_back_to_mainmenu(background_image,savefile):
 	#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!save game
@@ -194,6 +222,7 @@ def go_to_ingame_screen(background_image,savefile = None):
 		if user_save_file == "FALSE":
 			start_game_savefile = generate_start_game_file(user_field_choise,user_difficulty_choise)
 
+		#___create labels with numbers from save game file
 		with open("set_game_savefile.csv", "r",newline='') as save_game_file:
 			csv_reader = csv.reader(save_game_file)
 			for row in csv_reader:
@@ -204,26 +233,26 @@ def go_to_ingame_screen(background_image,savefile = None):
 					a_4 = str(row[4])
 				if row[0] == "A_v":
 					if row[1] == "TRUE":
-						row_a_1 = Label(root,text = str(a_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_1 = Label(root,text =" "+ str(a_1)+" ",font =("Arial",115), bg = "white",justify = CENTER)
 						row_a_1.place(relx=.225, rely= 0.272, anchor="center")
 					elif row[1] == "FALSE":
 						print("not visible")
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
 						pass
 					if row[2] == "TRUE":
-						row_a_2 = Label(root,text = str(a_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_2 = Label(root,text = " "+str(a_2)+" ",font =("Arial",115), bg = "white",justify = CENTER)
 						row_a_2.place(relx=.41, rely= 0.272, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[3] == "TRUE":
-						row_a_2 = Label(root,text = str(a_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_2 = Label(root,text = " "+str(a_3)+" ",font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_a_2.place(relx=.59, rely= 0.272, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[4] == "TRUE":
-						row_a_2 = Label(root,text = str(a_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_a_2 = Label(root,text = " "+str(a_4)+" ",font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_a_2.place(relx=.77, rely= 0.272, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
@@ -235,25 +264,25 @@ def go_to_ingame_screen(background_image,savefile = None):
 					b_4 = str(row[4])
 				if row[0] == "B_v":
 					if row[1] == "TRUE":
-						row_b_1 = Label(root,text = str(b_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_1 = Label(root,text = " "+str(b_1)+" ",font =("Arial",115), bg = "white",justify = CENTER)
 						row_b_1.place(relx=.225, rely= 0.45, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
 						pass
 					if row[2] == "TRUE":
-						row_b_2 = Label(root,text = str(b_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_2 = Label(root,text = " "+str(b_2)+" ",font =("Arial",115), bg = "white",justify = CENTER)
 						row_b_2.place(relx=.41, rely= 0.45, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[3] == "TRUE":
-						row_b_2 = Label(root,text = str(b_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_2 = Label(root,text = " "+str(b_3)+" ",font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_b_2.place(relx=.59, rely= 0.45, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[4] == "TRUE":
-						row_b_2 = Label(root,text = str(b_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_b_2 = Label(root,text = " "+str(b_4)+" ",font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_b_2.place(relx=.77, rely= 0.45, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
@@ -265,25 +294,25 @@ def go_to_ingame_screen(background_image,savefile = None):
 					c_4 = str(row[4])
 				if row[0] == "C_v":
 					if row[1] == "TRUE":
-						row_c_1 = Label(root,text = str(c_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_1 = Label(root,text = " "+str(c_1)+" ",font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_c_1.place(relx=.225, rely= 0.635, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
 						pass
 					if row[2] == "TRUE":
-						row_c_2 = Label(root,text = str(c_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_2 = Label(root,text = " "+str(c_2)+" ",font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_c_2.place(relx=.41, rely= 0.635, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[3] == "TRUE":
-						row_c_2 = Label(root,text = str(c_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_2 = Label(root,text = " "+str(c_3)+" ",font =("Arial",115), bg = "white",justify = CENTER)
 						row_c_2.place(relx=.59, rely= 0.635, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[4] == "TRUE":
-						row_c_2 = Label(root,text = str(c_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_c_2 = Label(root,text = " "+str(c_4)+" ",font =("Arial",115), bg = "white",justify = CENTER)
 						row_c_2.place(relx=.77, rely= 0.635, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
@@ -295,32 +324,29 @@ def go_to_ingame_screen(background_image,savefile = None):
 					d_4 = str(row[4])
 				if row[0] == "D_v":
 					if row[1] == "TRUE":
-						row_d_1 = Label(root,text = str(d_1),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_1 = Label(root,text = " "+str(d_1),font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_d_1.place(relx=.225, rely= 0.815, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear override posizion
 						pass
 					if row[2] == "TRUE":
-						row_d_2 = Label(root,text = str(d_2),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_2 = Label(root,text = " "+str(d_2),font =("Arial",115), bg = "#ececec",justify = CENTER)
 						row_d_2.place(relx=.41, rely= 0.815, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[3] == "TRUE":
-						row_d_2 = Label(root,text = str(d_3),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_2 = Label(root,text = " "+str(d_3),font =("Arial",115), bg = "white",justify = CENTER)
 						row_d_2.place(relx=.59, rely= 0.815, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
 					if row[4] == "TRUE":
-						row_d_2 = Label(root,text = str(d_4),font =("Arial",115), bg = "white",justify = CENTER)
+						row_d_2 = Label(root,text = " "+str(d_4),font =("Arial",115), bg = "white",justify = CENTER)
 						row_d_2.place(relx=.77, rely= 0.815, anchor="center")
 					else:
 						#!!!!!!!!!!!!!!!!!!!!!!!!!!! Button numbers clear
 						pass
-
-
-
 
 			save_game_file.close()
 		
@@ -363,7 +389,7 @@ def go_to_ingame_screen(background_image,savefile = None):
 	#___mouse hover and function call
 	info_ingame_button.bind("<Enter>", set_info_ingame_button_hover)
 	info_ingame_button.bind("<Leave>", set_info_ingame_button_active)
-	info_ingame_button_onclick_funktion = lambda x:show_info_screen()
+	info_ingame_button_onclick_funktion = lambda x:show_info_screen(background_image,"set_game_savefile.csv")
 	info_ingame_button.bind("<Button-1>",info_ingame_button_onclick_funktion)
 
 	#___________________Exit Button
