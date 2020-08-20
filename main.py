@@ -497,7 +497,7 @@ def go_to_difficulty_screen(background_image):
 
 
 	#___saves the user input choise in set_difficulty.csv
-	def overwrite_difficulty_in_file(default_4x4 = "active",default_9x9 = "inactive",default_16x16 = "inactive",novize = "novize_active",master = "master_locked",legend = "legend_locked",target = None):
+	def overwrite_difficulty_in_file(default_4x4 = "active",default_9x9 = "inactive",default_16x16 = "inactive",novize = "novize_active",master = "master_inactive",legend = "legend_inactive",target = None):
 
 		#___reads set_difficulty.csv to restore the last default and creates a copy with new user input in it 
 		with open("set_difficulty.csv", "r",newline='') as difficulty_file:
@@ -507,22 +507,31 @@ def go_to_difficulty_screen(background_image):
 			possible_difficulties_9x9 = []
 			possible_difficulties_16x16 = []
 
+			#___switching between 4x4,9x9,16x16
 			for row in csv_reader:
 				if row[0] == "default_4x4":
-					current_difficulty = row[2:]
-					for item in current_difficulty:
-						possible_difficulties_4x4.append(item)
+					possible_difficulties_4x4 = [novize,master,legend]
+					#row[3:]
+					#possible_difficulties_4x4.append(novize)
+					#for item in current_difficulty:
+						#possible_difficulties_4x4.append(item)
 				elif row[0] == "default_9x9":
-					current_difficulty = row[2:]
-					for item in current_difficulty:
-						possible_difficulties_9x9.append(item)
+					possible_difficulties_9x9 = [novize,master,legend]
+					#current_difficulty = row[3:]
+					#possible_difficulties_9x9.append(novize)
+					#for item in current_difficulty:
+						#possible_difficulties_9x9.append(item)
 				elif row[0] == "default_16x16":
-					current_difficulty = row[2:]
-					for item in current_difficulty:
-						possible_difficulties_16x16.append(item)
+					possible_difficulties_16x16 = [novize,master,legend]
+					#current_difficulty = row[3:]
+					#possible_difficulties_16x16.append(novize)
+					#for item in current_difficulty:
+						#possible_difficulties_16x16.append(item)
 
 			difficulty_file.close()
 
+
+		#__ individual switch between novize, master, legend as sson current difficulty button is selected
 		if target == "possible_difficulties_4x4":
 		 	possible_difficulties_4x4 = []
 		 	possible_difficulties_4x4 = [novize,master,legend]
@@ -553,7 +562,6 @@ def go_to_difficulty_screen(background_image):
 		upadated_16x16_difficulty_lst.append(default_16x16)
 		for item in possible_difficulties_16x16:
 			upadated_16x16_difficulty_lst.append(str(item))
-
 
 		upadated_difficulty_lst.append(upadated_4x4_difficulty_lst)
 		upadated_difficulty_lst.append(upadated_9x9_difficulty_lst)
@@ -596,10 +604,10 @@ def go_to_difficulty_screen(background_image):
 					for item in current_difficulty:
 						possible_difficulties_16x16.append(item)
 
-
 			default_4x4 = str(last_safed_field_state_lst[0])
 			default_9x9 = str(last_safed_field_state_lst[1])
 			default_16x16 = str(last_safed_field_state_lst[2])
+
 
 			difficulty_file.close()
 
@@ -607,7 +615,7 @@ def go_to_difficulty_screen(background_image):
 		with open("set_achievements.csv", "r",newline='') as achievement_file:
 			csv_reader = csv.reader(achievement_file)
 
-
+			print(possible_difficulties_9x9)
 			for row in csv_reader:
 				if row[0] == "4x4Novize":
 					if row[1] == "FALSE":
@@ -629,6 +637,9 @@ def go_to_difficulty_screen(background_image):
 						possible_difficulties_16x16[2] = "legend_locked"
 
 			achievement_file.close()
+
+		print(possible_difficulties_9x9)
+
 
 		#__define field size button
 		if default_4x4 == "active":
@@ -664,10 +675,10 @@ def go_to_difficulty_screen(background_image):
 					if possible_difficulties_4x4[2] == "legend_inactive":
 						d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_inactive","master_active","legend_inactive","possible_difficulties_4x4"))
 						d_screen_master_button.image = master_button_inactive
-					else:
+					elif possible_difficulties_4x4[2] == "legend_locked":
 						d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_inactive","master_active","legend_locked","possible_difficulties_4x4"))
 						d_screen_master_button.image = master_button_inactive
-				elif possible_difficulties_4x4[1] == "master_locked":
+				if possible_difficulties_4x4[1] == "master_locked":
 						d_screen_master_button = Button(root,image = master_button_locked,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 						d_screen_master_button.place(relx=.5, rely= 0.45, anchor="center")
 						d_screen_master_button.config( image = master_button_locked)
@@ -696,18 +707,18 @@ def go_to_difficulty_screen(background_image):
 						d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_active","master_inactive","legend_inactive","possible_difficulties_4x4"))
 						d_screen_novize_button.config( image = novize_button_inactive)
 						d_screen_novize_button.image = novize_button_inactive
-					else:
+					elif possible_difficulties_4x4[2] == "legend_locked":
 						d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_active","master_inactive","legend_locked","possible_difficulties_4x4"))
 						d_screen_novize_button.config( image = novize_button_inactive)
 						d_screen_novize_button.image = novize_button_inactive
 
-				if possible_difficulties_4x4[2] == "inactive":
+				if possible_difficulties_4x4[2] == "legend_inactive":
 						d_screen_legend_button = Button(root,image = legend_button_inactive,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 						d_screen_legend_button.place(relx=.665, rely= 0.45, anchor="center")
 						d_screen_legend_button.config( image = legend_button_inactive)
 						d_screen_legend_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_inactive","master_inactive","legend_active","possible_difficulties_4x4"))
 						d_screen_legend_button.image = legend_button_inactive
-				elif possible_difficulties_4x4[2] == "legend_locked":
+				if possible_difficulties_4x4[2] == "legend_locked":
 						d_screen_legend_button = Button(root,image = legend_button_locked,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 						d_screen_legend_button.place(relx=.665, rely= 0.45, anchor="center")
 						d_screen_legend_button.config( image = legend_button_locked)
@@ -724,7 +735,7 @@ def go_to_difficulty_screen(background_image):
 					d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_active","master_inactive","legend_inactive","possible_difficulties_4x4"))
 					d_screen_novize_button.config( image = novize_button_inactive)
 					d_screen_novize_button.image = novize_button_inactive
-				elif possible_difficulties_4x4[1] == "master_inactive":
+				if possible_difficulties_4x4[1] == "master_inactive":
 					d_screen_master_button = Button(root,image = master_button_inactive,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 					d_screen_master_button.place(relx=.5, rely= 0.45, anchor="center")
 					d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_inactive","master_active","legend_inactive","possible_difficulties_4x4"))
@@ -763,7 +774,7 @@ def go_to_difficulty_screen(background_image):
 					if possible_difficulties_9x9[2] == "legend_inactive":
 						d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_inactive","master_active","legend_inactive","possible_difficulties_9x9"))
 						d_screen_master_button.image = master_button_inactive
-					else:
+					elif possible_difficulties_9x9[2] == "legend_locked":
 						d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_inactive","master_active","legend_locked","possible_difficulties_9x9"))
 						d_screen_master_button.image = master_button_inactive
 				elif possible_difficulties_9x9[1] == "master_locked":
@@ -795,16 +806,15 @@ def go_to_difficulty_screen(background_image):
 						d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_active","master_inactive","legend_inactive","possible_difficulties_9x9"))
 						d_screen_novize_button.config( image = novize_button_inactive)
 						d_screen_novize_button.image = novize_button_inactive
-					else:
+					elif possible_difficulties_9x9[2] == "legend_locked":
 						d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_active","master_inactive","legend_locked","possible_difficulties_9x9"))
 						d_screen_novize_button.config( image = novize_button_inactive)
 						d_screen_novize_button.image = novize_button_inactive
-
-				if possible_difficulties_9x9[2] == "inactive":
+				if possible_difficulties_9x9[2] == "legend_inactive":
 						d_screen_legend_button = Button(root,image = legend_button_inactive,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 						d_screen_legend_button.place(relx=.665, rely= 0.45, anchor="center")
 						d_screen_legend_button.config( image = legend_button_inactive)
-						d_screen_legend_button.config( command = lambda:overwrite_difficulty_in_file("active","inactive","inactive","novize_inactive","master_inactive","legend_active","possible_difficulties_4x4"))
+						d_screen_legend_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_inactive","master_inactive","legend_active","possible_difficulties_9x9"))
 						d_screen_legend_button.image = legend_button_inactive
 				elif possible_difficulties_9x9[2] == "legend_locked":
 						d_screen_legend_button = Button(root,image = legend_button_locked,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
@@ -823,7 +833,7 @@ def go_to_difficulty_screen(background_image):
 					d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_active","master_inactive","legend_inactive","possible_difficulties_9x9"))
 					d_screen_novize_button.config( image = novize_button_inactive)
 					d_screen_novize_button.image = novize_button_inactive
-				elif possible_difficulties_9x9[1] == "master_inactive":
+				if possible_difficulties_9x9[1] == "master_inactive":
 					d_screen_master_button = Button(root,image = master_button_inactive,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 					d_screen_master_button.place(relx=.5, rely= 0.45, anchor="center")
 					d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("inactive","active","inactive","novize_inactive","master_active","legend_inactive","possible_difficulties_9x9"))
@@ -862,7 +872,7 @@ def go_to_difficulty_screen(background_image):
 					if possible_difficulties_16x16[2] == "legend_inactive":
 						d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("inactive","inactive","active","novize_inactive","master_active","legend_inactive","possible_difficulties_16x16"))
 						d_screen_master_button.image = master_button_inactive
-					else:
+					elif possible_difficulties_16x16[2] == "legend_locked":
 						d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("inactive","inactive","active","novize_inactive","master_active","legend_locked","possible_difficulties_16x16"))
 						d_screen_master_button.image = master_button_inactive
 				elif possible_difficulties_16x16[1] == "master_locked":
@@ -894,12 +904,12 @@ def go_to_difficulty_screen(background_image):
 						d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("inactive","inactive","active","novize_active","master_inactive","legend_inactive","possible_difficulties_16x16"))
 						d_screen_novize_button.config( image = novize_button_inactive)
 						d_screen_novize_button.image = novize_button_inactive
-					else:
+					elif possible_difficulties_16x16[2] == "legend_locked":
 						d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("inactive","inactive","active","novize_active","master_inactive","legend_locked","possible_difficulties_16x16"))
 						d_screen_novize_button.config( image = novize_button_inactive)
 						d_screen_novize_button.image = novize_button_inactive
 
-				if possible_difficulties_16x16[2] == "inactive":
+				if possible_difficulties_16x16[2] == "legend_inactive":
 						d_screen_legend_button = Button(root,image = legend_button_inactive,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 						d_screen_legend_button.place(relx=.665, rely= 0.45, anchor="center")
 						d_screen_legend_button.config( image = legend_button_inactive)
@@ -922,12 +932,16 @@ def go_to_difficulty_screen(background_image):
 					d_screen_novize_button.config( command = lambda:overwrite_difficulty_in_file("inactive","inactive","active","novize_active","master_inactive","legend_inactive","possible_difficulties_16x16"))
 					d_screen_novize_button.config( image = novize_button_inactive)
 					d_screen_novize_button.image = novize_button_inactive
-				elif possible_difficulties_16x16[1] == "master_inactive":
+				if possible_difficulties_16x16[1] == "master_inactive":
 					d_screen_master_button = Button(root,image = master_button_inactive,highlightthickness = 0, bd = 0,relief = FLAT,justify = CENTER)
 					d_screen_master_button.place(relx=.5, rely= 0.45, anchor="center")
 					d_screen_master_button.config( command = lambda:overwrite_difficulty_in_file("inactive","inactive","active","novize_inactive","master_active","legend_inactive","possible_difficulties_16x16"))
 					d_screen_master_button.config( image = master_button_inactive)
 					d_screen_master_button.image = master_button_inactive
+			
+
+		
+		
 
 	load_last_play_default()
 

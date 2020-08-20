@@ -70,7 +70,7 @@ def add_difficulty(orginal_field,minimum = 6,maximum = 7,row_size = 4,false_coun
 
 	#___get and return an random number beween 2 and row size (4,9,16) for random indexing
 	def get_random_position(row_size):
-		position = random.choice(range(2,(row_size +1)))
+		position = random.choice(range(1,(row_size +1)))
 		return position
 	#___base case 01 > if 6 FALSE are in the list, return it
 	if false_count == minimum:
